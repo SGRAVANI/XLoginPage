@@ -3,16 +3,25 @@ import styles from "./style.module.css"
 // import Child from './Child';
 export default function LoginPage() {
     let [ip,setIp]=useState({user:"",pwd:""})
-    let [f,setF]=useState(false)
+    let [f,setF]=useState(true)
     let [sbmtData,setSbmtData]=useState({})
+    let [errorMsg,setErrorMsg]=useState(false);
+    let [welcomeFlag,setwelcomeFlag]=useState(false)
     function handleSubmit(e)
     {
     e.preventDefault();
-    setF(true)
+    if(ip.user==="user" && ip.pwd==="password")
+    {
+    setF(false)
+    setwelcomeFlag(true)
+    setErrorMsg(false)
+    }
+    else{
+        setErrorMsg("Invalid username or password")
+    }
     //data={fname:ip.fname,lname:ip.lname}
-    setSbmtData(ip)
-   //  setIp({fname:"",lname:""})
-    console.log("data is submitted")
+      //  setIp({fname:"",lname:""})
+    //console.log("data is submitted")
     }
     function handleChange(e){
         setIp((prev)=>{
@@ -23,9 +32,10 @@ export default function LoginPage() {
 
   return (
     <div>
-      
-    <form className={styles.container} onSubmit={handleSubmit}>
+    {errorMsg &&<h5 style={{color:"red"}}>{errorMsg}</h5>}  
     <h1>Login Page</h1>
+    {f&&<form className={styles.container} onSubmit={handleSubmit}>
+    
     <div className={styles.inputContainer}>
         <label htmlFor='user'> Username:</label>
         <input type="text" required name="user" id="user" onChange={handleChange} value={ip.fname} placeholder='username'/>
@@ -38,10 +48,10 @@ export default function LoginPage() {
     </div>
     <div className={styles.buttonContainer}>
         <button type="submit" >Submit</button>
-    </div>
-    </form>
-    
-   {/* {f&& <Child data={sbmtData} />}         */}
+    </div> 
+    </form>}
+
+   {welcomeFlag&& <p style={{margin:"1rem"}}>Welcome, {ip.user}!"</p>}        
     </div>
   )
 }
